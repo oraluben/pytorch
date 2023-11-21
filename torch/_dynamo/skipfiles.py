@@ -142,6 +142,10 @@ THIRDPARTY_SKIPLIST = (
     "tree",
     "tvm",
     "xarray",
+    # 'deepspeed.runtime.zero.partitioned_param_coordinator',
+    # 'deepspeed.accelerator.cuda_accelerator',
+    # 'deepspeed',
+    # 'deepspeed.utils.nvtx',
 )
 
 
