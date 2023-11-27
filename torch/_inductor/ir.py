@@ -3831,13 +3831,20 @@ class UserDefinedTritonKernel(ExternKernel):
             kernel, configs, self.kwargs
         )
 
+        args = self.codegen_kwargs()
+        if V.graph.cpp_wrapper:
+            # in C++ wrapper, we don't pass constexpr args, as they don't
+            # get added as parameters to the PTX code compiled from the
+            # user-defined Triton kernel (only non-constexpr args do)
+            args = [arg for i, arg in enumerate(args) if i not in kernel.constexprs]
+
         # Call to kernel
         self.codegen_comment(wrapper)
         wrapper.generate_user_defined_triton_kernel(
             new_name,
             self.grid,
             configs,
-            self.codegen_kwargs(),
+            args,
         )
 
     def should_allocate(self):
@@ -5111,7 +5118,7 @@ class ConvolutionBinaryInplace(ExternKernelAlloc):
         )
 
     def get_mutation_names(self):
-        return [self.inputs[1].get_name()]
+        return [self.inputs[0].get_name()]
 
     def get_unbacked_symbol_defs(self):
         return {}
