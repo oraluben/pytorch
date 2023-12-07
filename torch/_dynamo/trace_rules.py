@@ -12,7 +12,7 @@ from .allowed_functions import (
 
 from .utils import hashable
 
-from .variables import TorchCtxManagerClassVariable, TorchInGraphFunctionVariable
+from .variables import ConstantVariable, TorchCtxManagerClassVariable, TorchInGraphFunctionVariable
 
 
 """
@@ -184,6 +184,8 @@ def lookup(obj):
         return None
     if is_user_defined_allowed(obj):
         return TorchInGraphFunctionVariable
+    if isinstance(obj, str):
+        return ConstantVariable
     if hasattr(obj, "__wrapped__"):
         # TODO: Weird case, should not unwrap if it's wrapped as _VariableFunctionsClass.
         if not (
