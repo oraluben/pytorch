@@ -34,7 +34,11 @@ const uint32_t block_size_bound = 256;
 const uint32_t grid_size_bound = 4;
 // At the time of writing, there is no curand_* call that increments the offset by more than 4.
 // See: https://docs.nvidia.com/cuda/archive/11.8.0/curand/group__DEVICE.html
+#ifdef USE_ROCM
+const uint32_t max_generator_offsets_per_curand_call = 8;
+#else
 const uint32_t max_generator_offsets_per_curand_call = 4;
+#endif
 
 // utility function that calculates proper philox_offset
 // for distributions utilizing TensorIterator. For distributions using
